@@ -13,6 +13,7 @@ export type OptimisticWrapperFunction<T extends AnyFn> = T & {
   // The .dirty(...) method of an optimistic function takes exactly the
   // same parameter types as the original function.
   dirty: T;
+  has: T;
 };
 
 export type OptimisticWrapOptions = {
@@ -103,6 +104,16 @@ export function wrap<T extends AnyFn>(originalFunction: T, {
       (cache.get(key) as Entry).setDirty();
     }
   };
+
+  optimistic.has = function(...args: any[]): boolean {
+    const key = makeCacheKey.apply(null, args);
+
+    if (key && cache.has(key)) {
+      return true
+    }
+
+    return false
+  }
 
   return optimistic as OptimisticWrapperFunction<T>;
 }

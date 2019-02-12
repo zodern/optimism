@@ -188,6 +188,16 @@ describe("optimism", function () {
     assert.deepEqual(order, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
+  it("allows checking if key is cached", function () {
+    var test = wrap(function (a) {
+      return a;
+    })
+    test('1')
+
+    assert.strictEqual(test.has('1'), true)
+    assert.strictEqual(test.has('3'), false)
+  });
+
   it("marks evicted cache entries dirty", function () {
     var childSalt = "*";
     var child = wrap(function (x) {
